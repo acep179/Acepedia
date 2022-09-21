@@ -27,11 +27,11 @@ function App() {
   }, [isSideBarCollapse])
 
   return (
-    <div>
+    <div className='bg-white dark:bg-gray-900 relative'>
       <NavBar isSideBarCollapse={isSideBarCollapse} setIsSideBarCollapse={setIsSideBarCollapse} />
       <div className='flex'>
         <SideBar sideBarWidth={sideBarWidth} />
-        <div className='mt-20 w-3/4'>
+        <div className='mt-20 px-4 mx-auto w-3/4'>
           <Routes>
             <Route path='/' element={<Dashboard/>} />
             <Route path='/inbox' element={<Inbox/>} />

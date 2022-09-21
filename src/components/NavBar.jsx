@@ -22,7 +22,7 @@ function NavBar({ isSideBarCollapse, setIsSideBarCollapse }) {
   })
 
   return (
-    <nav className="bg-white shadow border-gray-200 px-2 sm:px-4 py-4 rounded dark:bg-gray-900 fixed w-full">
+    <nav className="bg-white shadow dark:shadow-gray-500 border-gray-200 px-2 sm:px-4 py-4 rounded dark:bg-gray-900 fixed w-full">
       <div className="flex flex-wrap justify-between items-center mx-auto">
         <div className="flex items-center">
           <button>
