@@ -1,11 +1,46 @@
+import { useEffect, useState } from 'react';
 import {Routes, Route} from 'react-router-dom'
-import { Products } from './pages';
+import { NavBar, SideBar } from './components';
+import { Dashboard,Inbox,Customers, Products } from './pages';
 
 function App() {
+
+  const [isSideBarCollapse, setIsSideBarCollapse] = useState(false)
+  const [sideBarWidth, setSideBarWidth] = useState('')
+
+  const sideBarCollapse = () => {
+
+    const elements = document.querySelectorAll('[data-sidebar="text"]')
+    elements.forEach(element => {
+      element.classList.toggle('hidden')
+    });
+
+    const listParent = document.querySelector('[data-sidebar="list-parent"]')
+    listParent.classList.toggle('items-center')
+
+  }
+  
+  useEffect(() => {
+    sideBarCollapse()
+    let fixedSideBar = document.getElementById('fixedSideBar')
+    setSideBarWidth(fixedSideBar.offsetWidth)
+  }, [isSideBarCollapse])
+
   return (
-    <Routes>
-      <Route path='/' element={<Products/>} />
-    </Routes>
+    <div>
+      <NavBar isSideBarCollapse={isSideBarCollapse} setIsSideBarCollapse={setIsSideBarCollapse} />
+      <div className='flex'>
+        <SideBar sideBarWidth={sideBarWidth} />
+        <div className='mt-20 w-3/4'>
+          <Routes>
+            <Route path='/' element={<Dashboard/>} />
+            <Route path='/inbox' element={<Inbox/>} />
+            <Route path='/customers' element={<Customers/>} />
+            <Route path='/products' element={<Products/>} />
+          </Routes>
+        </div>
+      </div>
+    </div>
   );
 }
 

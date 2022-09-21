@@ -1,7 +1,60 @@
+import profileImage from './../assets/profile.png'
+import { RiPieChart2Fill } from 'react-icons/ri'
+import { BsBoxSeam, BsMailbox2, BsPeopleFill } from 'react-icons/bs'
+import { HiOutlineLogout } from 'react-icons/hi'
+import { Link } from 'react-router-dom'
 
-function SideBar() {
+function SideBar({ sideBarWidth }) {
+
   return (
-    <div>SideBar</div>
+
+    <aside className="before:block before:w-full min-w-[] before:mb-14 duration-300" style={{ width: sideBarWidth }} aria-label="Sidebar" id="sideBar">
+      <div className="fixed py-4 px-3 bg-gray-50 rounded dark:bg-gray-800" id="fixedSideBar">
+        <Link to="/profile" className='mb-5 flex items-center mr-3 px-2 text-sm text-left rounded-md md:mr-0 hover:bg-gray-100 dark:hover:bg-gray-700'>
+          <span className="sr-only">Open user menu</span>
+          <img className="w-10 h-10 my-3 rounded-full" src={profileImage} alt="user" />
+          <div className="ml-4" data-sidebar="text">
+            <p className="text-sm text-gray-900 dark:text-white">Acep Awaludin</p>
+            <p className="text-sm font-medium text-gray-500 truncate dark:text-gray-400">acep.awaludin179@gmail.com</p>
+          </div>
+        </Link>
+        <div className='flex flex-col justify-between h-[76vh]' data-sidebar="list-parent">
+          <ul className="space-y-2">
+            <li>
+              <Link to="/" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                <RiPieChart2Fill className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+                <span className="ml-3" data-sidebar="text">Dashboard</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/inbox" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                <BsMailbox2 className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+                <span className="flex-1 ml-3 whitespace-nowrap" data-sidebar="text">Inbox</span>
+                <span className="inline-flex justify-center items-center p-3 ml-3 w-3 h-3 text-sm font-medium text-blue-600 bg-blue-200 rounded-full dark:bg-blue-900 dark:text-blue-200" data-sidebar="text">3</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/customers" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                <BsPeopleFill className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+                <span className="flex-1 ml-3 whitespace-nowrap" data-sidebar="text">Customers</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/products" className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+                <BsBoxSeam className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+                <span className="flex-1 ml-3 whitespace-nowrap" data-sidebar="text">Products</span>
+              </Link>
+            </li>
+          </ul>
+          <div>
+            <button className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 w-full">
+              <HiOutlineLogout className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+              <span className="flex-1 ml-3 whitespace-nowrap text-left" data-sidebar="text">Sign Out</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </aside>
   )
 }
 
