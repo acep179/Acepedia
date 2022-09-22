@@ -27,8 +27,8 @@ function Products() {
     <div className="mb-5 mx-auto">
       <div className='flex justify-between items-center mb-5'>
         <h1 className="text-3xl dark:text-white">Products</h1>
-        <AddProduct />
-        <EditProduct productData={productData} />
+        <AddProduct products={products} />
+        <EditProduct products={products} productData={productData} />
         <DeleteProduct productData={productData} />
       </div>
       <table className="table-auto w-full text-sm text-gray-500 dark:text-gray-400">

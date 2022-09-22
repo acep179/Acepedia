@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 
-function EditProduct({ productData }) {
+function EditProduct({ products, productData }) {
+
+  const nameElement = useRef()
+  nameElement.current = document.getElementsByName('name')
 
   const [preview, setPreview] = useState(null)
   const [message, setMessage] = useState('')
@@ -91,6 +94,28 @@ function EditProduct({ productData }) {
     }
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const existingProductName = products.filter((item) => {
+      return form.name === item.name
+    })
+
+    if (existingProductName.length) {
+      nameElement.current[0].className = "bg-red-50 border border-red-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-red-500 dark:placeholder-red-400"
+      return setMessage(
+        <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+          <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+          <span className="sr-only">Info</span>
+          <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
+            The product name already exist!
+          </div>
+        </div>
+      )
+    }
+
+  }
+
   return (
     <>
       <div id="editProductModal" tabIndex="-1" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 bottom-0 z-50 w-full md:inset-0 md:h-full justify-center items-center">
@@ -105,7 +130,8 @@ function EditProduct({ productData }) {
             <div className="py-6 px-6 lg:px-8">
               <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Edit Product</h3>
               {message && message}
-              <form className="space-y-6" action="#">
+
+              <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
                 {preview && (
                   <div className='mb-2'>
                     <img

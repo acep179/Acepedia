@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { BiAddToQueue } from 'react-icons/bi'
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { IoClose } from 'react-icons/io5';
 
-function AddProduct() {
+function AddProduct({ products }) {
+
+  const nameElement = useRef()
+  nameElement.current = document.getElementsByName('name')
 
   const [preview, setPreview] = useState(null)
   const [message, setMessage] = useState('')
@@ -31,23 +34,25 @@ function AddProduct() {
 
   const handleChange = (e) => {
 
+    nameElement.current[0].className = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+
     if (e.target.type === 'file') {
       if (e.target.files[0].size > 100000) {
         return setMessage(
-          <div id="alert-2" class="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
-            <BsFillExclamationCircleFill class="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
-            <span class="sr-only">Info</span>
-            <div class="ml-3 text-sm font-medium text-red-700 dark:text-red-800">
+          <div id="alert-2" className="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+            <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+            <span className="sr-only">Info</span>
+            <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800">
               Maximum image size is 100KB
             </div>
           </div>
         )
       } else if (e.target.files[0].type !== "image/jpeg" && e.target.files[0].type !== "image/png") {
         return setMessage(
-          <div id="alert-2" class="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
-            <BsFillExclamationCircleFill class="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
-            <span class="sr-only">Info</span>
-            <div class="ml-3 text-sm font-medium text-red-700 dark:text-red-800">
+          <div id="alert-2" className="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+            <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+            <span className="sr-only">Info</span>
+            <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800">
               Please, choose jpg or png image
             </div>
           </div>
@@ -63,10 +68,10 @@ function AddProduct() {
         if (isNaN(number)) {
           e.target.className = "bg-red-50 border border-red-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-red-500 dark:placeholder-red-400"
           return setMessage(
-            <div id="alert-2" class="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
-              <BsFillExclamationCircleFill class="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
-              <span class="sr-only">Info</span>
-              <div class="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
+            <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+              <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+              <span className="sr-only">Info</span>
+              <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
                 The {e.target.placeholder} column must be a number!
               </div>
             </div>
@@ -75,7 +80,6 @@ function AddProduct() {
         e.target.className = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
         break
       default:
-        e.target.className = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
     }
 
     setMessage('')
@@ -93,6 +97,29 @@ function AddProduct() {
       setPreview(url);
     }
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    const existingProductName = products.filter((item) => {
+      return form.name === item.name
+    })
+
+    if (existingProductName.length) {
+      nameElement.current[0].className = "bg-red-50 border border-red-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-red-500 dark:placeholder-red-400"
+      return setMessage(
+        <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+          <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+          <span className="sr-only">Info</span>
+          <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
+            The product name already exist!
+          </div>
+        </div>
+      )
+    }
+
+  }
+
 
   return (
     <>
@@ -113,7 +140,8 @@ function AddProduct() {
             <div className="py-6 px-6 lg:px-8">
               <h3 className="mb-4 text-xl font-medium text-gray-900 dark:text-white">Add Product</h3>
               {message && message}
-              <form className="space-y-6" action="#">
+
+              <form className="space-y-6" onSubmit={(e) => handleSubmit(e)}>
                 {preview && (
                   <div className='mb-2'>
                     <img
