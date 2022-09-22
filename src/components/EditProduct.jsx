@@ -122,7 +122,7 @@ function EditProduct({ products, productData }) {
         <div id='modalBg' className="fixed z-40 top-0 bottom-0 right-0 left-0 bg-slate-500 bg-opacity-50" onClick={close}></div>
         <div className="relative p-4 w-full max-w-md h-full md:h-auto">
 
-          <div className="relative z-50 bg-white rounded-lg shadow dark:bg-gray-700">
+          <div className="relative z-50 bg-white rounded-lg shadow dark:bg-gray-900">
             <button type="button" className="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" onClick={close}>
               <IoClose className='w-6 h-6' />
               <span className="sr-only">Close modal</span>

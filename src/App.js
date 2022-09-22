@@ -27,7 +27,7 @@ function App() {
   }, [isSideBarCollapse])
 
   return (
-    <div className='bg-white dark:bg-gray-900 relative'>
+    <div className='bg-white dark:bg-gray-900 relative dark:text-white min-h-screen'>
       <NavBar isSideBarCollapse={isSideBarCollapse} setIsSideBarCollapse={setIsSideBarCollapse} />
       <div className='flex'>
         <SideBar sideBarWidth={sideBarWidth} />
