@@ -33,6 +33,10 @@ function EditProduct({ products, productData }) {
 
     if (e.target.type === 'file') {
       if (e.target.files[0].size > 100000) {
+        setForm({
+          ...form,
+          image: 'wrong image',
+        })
         return setMessage(
           <div id="alert-2" class="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
             <BsFillExclamationCircleFill class="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
@@ -43,6 +47,10 @@ function EditProduct({ products, productData }) {
           </div>
         )
       } else if (e.target.files[0].type !== "image/jpeg" && e.target.files[0].type !== "image/png") {
+        setForm({
+          ...form,
+          image: 'wrong image',
+        })
         return setMessage(
           <div id="alert-2" class="flex p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
             <BsFillExclamationCircleFill class="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
@@ -114,6 +122,17 @@ function EditProduct({ products, productData }) {
       )
     }
 
+    if (form.image === "wrong image") {
+      return setMessage(
+        <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+          <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+          <span className="sr-only">Info</span>
+          <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
+            Please, choose image correctly!
+          </div>
+        </div>
+      )
+    }
   }
 
   return (

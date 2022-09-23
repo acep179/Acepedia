@@ -4,7 +4,9 @@ import { IoTrashBin, IoTriangle } from 'react-icons/io5'
 import { AddProduct, DeleteProduct, EditProduct } from "../components"
 import { useState } from "react"
 
-function Products() {
+function Products({ setTitle }) {
+
+  setTitle('Products')
 
   const [productData, setProductData] = useState({})
   const [productName, setProductName] = useState('')
@@ -47,76 +49,53 @@ function Products() {
         <EditProduct products={products} productData={productData} />
         <DeleteProduct productData={productData} />
       </div>
-      <table className="table-auto w-full text-sm text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th className="py-3 px-6">No</th>
-            <th className="py-3 px-6">Image</th>
-            <th className="py-3 px-6">Name</th>
-            <th className="py-3 px-6">Purchase Price</th>
-            <th className="py-3 px-6">Selling Price</th>
-            <th className="py-3 px-6">Stock</th>
-            <th className="py-3 px-6">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {searchProduct.length === 0 ? products.map((item, index) => {
-            return (
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={index}>
-                <td className="text-center">{index + 1}</td>
-                <td className="py-3"><img className="h-20" src={item.image} alt={item.name} /></td>
-                <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">{item.name}</td>
-                <td className="text-center">{item.purchasePrice}</td>
-                <td className="text-center">{item.sellingPrice}</td>
-                <td className="text-center">{item.qty}</td>
-                <td className="text-center">
-                  <button className='bg-red-500 hover:bg-red-600 px-2 py-1 ml-auto mr-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'delete')}>
-                    <IoTrashBin className="w-5 h-5" />
-                    <div className='hidden group-hover:block ml-2 absolute bg-red-200 w-max text-slate-600 px-2 py-1 rounded-md -bottom-10 left-0 z-10'>
-                      <IoTriangle className="w-6 h-6 absolute -top-4 left-0 fill-red-200" />
-                      <p className='font-semibold'>Remove Product</p>
-                    </div>
-                  </button>
-                  <button className='bg-emerald-500 hover:bg-emerald-600 px-2 py-1 mr-auto ml-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'edit')}>
-                    <AiOutlineEdit className="w-5 h-5" />
-                    <div className='hidden group-hover:block ml-2 absolute bg-emerald-200 w-max text-slate-600 px-2 py-1 rounded-md -bottom-10 left-0 z-10'>
-                      <IoTriangle className="w-6 h-6 absolute -top-4 left-0 fill-emerald-200" />
-                      <p className='font-semibold'>Edit Product</p>
-                    </div>
-                  </button>
-                </td>
-              </tr>
-            )
-          }) : searchProduct.map((item, index) => {
-            return (
-              <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" key={index}>
-                <td className="text-center">{index + 1}</td>
-                <td className="py-3"><img className="h-20" src={item.image} alt={item.name} /></td>
-                <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">{item.name}</td>
-                <td className="text-center">{item.purchasePrice}</td>
-                <td className="text-center">{item.sellingPrice}</td>
-                <td className="text-center">{item.qty}</td>
-                <td className="text-center">
-                  <button className='bg-red-500 hover:bg-red-600 px-2 py-1 ml-auto mr-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'delete')}>
-                    <IoTrashBin className="w-5 h-5" />
-                    <div className='hidden group-hover:block ml-2 absolute bg-red-200 w-max text-slate-600 px-2 py-1 rounded-md -bottom-10 left-0 z-10'>
-                      <IoTriangle className="w-6 h-6 absolute -top-4 left-0 fill-red-200" />
-                      <p className='font-semibold'>Remove Product</p>
-                    </div>
-                  </button>
-                  <button className='bg-emerald-500 hover:bg-emerald-600 px-2 py-1 mr-auto ml-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'edit')}>
-                    <AiOutlineEdit className="w-5 h-5" />
-                    <div className='hidden group-hover:block ml-2 absolute bg-emerald-200 w-max text-slate-600 px-2 py-1 rounded-md -bottom-10 left-0 z-10'>
-                      <IoTriangle className="w-6 h-6 absolute -top-4 left-0 fill-emerald-200" />
-                      <p className='font-semibold'>Edit Product</p>
-                    </div>
-                  </button>
-                </td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+
+      <div className="overflow-x-auto relative shadow-md dark:shadow-md dark:shadow-slate-500 sm:rounded-lg">
+        <table className="table-auto w-full text-sm text-gray-500 dark:text-gray-400">
+          <thead className="text-xs tracking-wider text-slate-50 uppercase bg-amber-500 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th className="py-3 px-6">No</th>
+              <th className="py-3 px-6">Image</th>
+              <th className="py-3 px-6">Name</th>
+              <th className="py-3 px-6">Purchase Price</th>
+              <th className="py-3 px-6">Selling Price</th>
+              <th className="py-3 px-6">Stock</th>
+              <th className="py-3 px-6">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {searchProduct.map((item, index) => {
+              return (
+                <tr className="bg-white border-b border-slate-500 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900" key={index}>
+                  <td className="text-center font-bold">{index + 1}</td>
+                  <td className="py-3"><img className="h-20" src={item.image} alt={item.name} /></td>
+                  <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">{item.name}</td>
+                  <td className="text-center">{item.purchasePrice}</td>
+                  <td className="text-center">{item.sellingPrice}</td>
+                  <td className="text-center">{item.qty}</td>
+                  <td className="text-center">
+                    <button className='bg-red-500 hover:bg-red-600 px-2 py-1 ml-auto mr-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'delete')}>
+                      <IoTrashBin className="w-5 h-5" />
+                      <div className='hidden group-hover:block ml-2 absolute bg-red-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
+                        <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-red-50" />
+                        <p className='font-semibold text-red-700'>Remove Product</p>
+                      </div>
+                    </button>
+                    <button className='bg-emerald-500 hover:bg-emerald-600 px-2 py-1 mr-auto ml-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'edit')}>
+                      <AiOutlineEdit className="w-5 h-5" />
+                      <div className='hidden group-hover:block ml-2 absolute bg-emerald-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
+                        <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-emerald-50" />
+                        <p className='font-semibold text-emerald-600'>Edit Product</p>
+                      </div>
+                    </button>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
+
       <nav className="flex justify-between items-center pt-4" aria-label="Table navigation">
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-10</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
         <ul className="inline-flex items-center -space-x-px">

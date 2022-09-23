@@ -5,6 +5,9 @@ import { Dashboard,Inbox,Customers, Products, Profile } from './pages';
 
 function App() {
 
+  const [title, setTitle] =useState()
+  document.title = 'Nutechpedia | ' + title
+
   const [isSideBarCollapse, setIsSideBarCollapse] = useState(false)
   const [sideBarWidth, setSideBarWidth] = useState('')
 
@@ -30,14 +33,14 @@ function App() {
     <div className='bg-white dark:bg-gray-900 relative dark:text-white min-h-screen'>
       <NavBar isSideBarCollapse={isSideBarCollapse} setIsSideBarCollapse={setIsSideBarCollapse} />
       <div className='flex'>
-        <SideBar sideBarWidth={sideBarWidth} />
+        <SideBar sideBarWidth={sideBarWidth} title={title} />
         <div className='mt-20 px-4 mx-auto w-3/4'>
           <Routes>
-            <Route path='/' element={<Dashboard/>} />
-            <Route path='/inbox' element={<Inbox/>} />
-            <Route path='/customers' element={<Customers/>} />
-            <Route path='/products' element={<Products/>} />
-            <Route path='/profile' element={<Profile/>} />
+            <Route path='/' element={<Dashboard setTitle={setTitle}/>} />
+            <Route path='/inbox' element={<Inbox setTitle={setTitle}/>} />
+            <Route path='/customers' element={<Customers setTitle={setTitle}/>} />
+            <Route path='/products' element={<Products setTitle={setTitle}/>} />
+            <Route path='/profile' element={<Profile setTitle={setTitle}/>} />
           </Routes>
         </div>
       </div>
