@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 
-function EditProduct({ products, productData }) {
+function EditProduct({ products, productData, setResultMessage }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -133,6 +133,19 @@ function EditProduct({ products, productData }) {
         </div>
       )
     }
+
+    setResultMessage(
+      <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-emerald-100 rounded-lg dark:bg-emerald-200" role="alert">
+        <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-emerald-700 dark:text-emerald-800" />
+        <span className="sr-only">Info</span>
+        <div className="ml-3 text-sm font-medium text-emerald-700 dark:text-emerald-800 ">
+          {productData.name} has been edited
+        </div>
+      </div>
+    )
+
+    close()
+    setTimeout(() => setResultMessage(''), 5000)
   }
 
   return (
@@ -173,13 +186,13 @@ function EditProduct({ products, productData }) {
                   onChange={handleChange}
                 />
 
-                <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder={`Product's Name: ${productData.name}`} onChange={handleChange} required />
+                <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder={`Product's Name: ${productData.name}`} onChange={handleChange} />
 
-                <input type="number" name="purchasePrice" id="purchasePrice" placeholder={`Purchase Price: Rp ${productData.purchasePrice}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} required />
+                <input type="number" name="purchasePrice" id="purchasePrice" placeholder={`Purchase Price: Rp ${productData.purchasePrice}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
 
-                <input type="number" name="sellingPrice" id="sellingPrice" placeholder={`Selling Price: Rp ${productData.sellingPrice}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} required />
+                <input type="number" name="sellingPrice" id="sellingPrice" placeholder={`Selling Price: Rp ${productData.sellingPrice}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
 
-                <input type="number" name="qty" id="qty" placeholder={`Product's Stock: ${productData.qty}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} required />
+                <input type="number" name="qty" id="qty" placeholder={`Product's Stock: ${productData.qty}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
 
                 <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
               </form>

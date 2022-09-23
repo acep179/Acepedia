@@ -11,6 +11,7 @@ function Products({ setTitle }) {
 
   const [productData, setProductData] = useState({})
   const [productName, setProductName] = useState('')
+  const [message, setMessage] = useState('')
 
   const showModal = (item, type) => {
     setProductData(item)
@@ -33,6 +34,7 @@ function Products({ setTitle }) {
 
   return (
     <div className="mb-5 mx-auto">
+      {message && message}
       <div className='flex justify-between items-center mb-5'>
         <div className="flex gap-4">
           <h1 className="text-3xl dark:text-white">Products</h1>
@@ -46,9 +48,9 @@ function Products({ setTitle }) {
             </div>
           </div>
         </div>
-        <AddProduct products={products} />
-        <EditProduct products={products} productData={productData} />
-        <DeleteProduct productData={productData} />
+        <AddProduct products={products} setResultMessage={setMessage} />
+        <EditProduct products={products} productData={productData} setResultMessage={setMessage} />
+        <DeleteProduct productData={productData} setResultMessage={setMessage} />
       </div>
 
       <div className="overflow-x-auto relative shadow-md dark:shadow-md dark:shadow-slate-500 sm:rounded-lg">
@@ -67,12 +69,12 @@ function Products({ setTitle }) {
           <tbody>
             {searchProduct.map((item, index) => {
               return (
-                <tr className="bg-white border-b border-slate-300 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
-                  <td className="text-center font-bold">{index + 1}</td>
+                <tr className="bg-white border-b text-gray-800 border-slate-300 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
+                  <td className="text-center font-semibold">{index + 1}</td>
                   <td className="py-3">
                     <img className="h-20 dark:group-odd:bg-slate-600/50 dark:group-even:bg-slate-600/40 rounded-md" src={item.image} alt={item.name} />
                   </td>
-                  <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">{item.name}</td>
+                  <td className="py-4 px-6 font-semibold dark:text-white">{item.name}</td>
                   <td className="py-4 px-6">{convertRupiah.convert(item.purchasePrice)}</td>
                   <td className="py-4 px-6">{convertRupiah.convert(item.sellingPrice)}</td>
                   <td className="text-center">{item.qty}</td>

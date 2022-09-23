@@ -5,10 +5,14 @@ import { Dashboard,Inbox,Customers, Products, Profile } from './pages';
 
 function App() {
 
+  if(!localStorage.theme){
+    localStorage.theme = 'dark'
+  }
+
   const [title, setTitle] =useState()
   document.title = 'Nutechpedia | ' + title
 
-  const [isSideBarCollapse, setIsSideBarCollapse] = useState(false)
+  const [isSideBarCollapse, setIsSideBarCollapse] = useState(true)
   const [sideBarWidth, setSideBarWidth] = useState('')
 
   const sideBarCollapse = () => {

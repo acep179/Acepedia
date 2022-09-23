@@ -3,7 +3,7 @@ import { BiAddToQueue } from 'react-icons/bi'
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { IoClose } from 'react-icons/io5';
 
-function AddProduct({ products }) {
+function AddProduct({ products, setResultMessage }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -129,7 +129,7 @@ function AddProduct({ products }) {
     for (const item in form) {
       if (form[item] === "") {
         return setMessage(
-          <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+          <div className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
             <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
             <span className="sr-only">Info</span>
             <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
@@ -139,7 +139,7 @@ function AddProduct({ products }) {
         )
       } else if (form[item] === "wrong image") {
         return setMessage(
-          <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+          <div className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
             <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
             <span className="sr-only">Info</span>
             <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
@@ -150,6 +150,19 @@ function AddProduct({ products }) {
 
       }
     }
+
+    setResultMessage(
+      <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-emerald-100 rounded-lg dark:bg-emerald-200" role="alert">
+        <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-emerald-700 dark:text-emerald-800" />
+        <span className="sr-only">Info</span>
+        <div className="ml-3 text-sm font-medium text-emerald-700 dark:text-emerald-800 ">
+          {form.name} has been added
+        </div>
+      </div>
+    )
+
+    close()
+    setTimeout(() => setResultMessage(''), 5000)
   }
 
   return (
