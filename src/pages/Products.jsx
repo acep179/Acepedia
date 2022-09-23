@@ -69,7 +69,7 @@ function Products({ setTitle }) {
           <tbody>
             {searchProduct.map((item, index) => {
               return (
-                <tr className="bg-white border-b text-gray-800 border-slate-300 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
+                <tr className="bg-white border-b text-gray-800 border-slate-300 dark:text-gray-400 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
                   <td className="text-center font-semibold">{index + 1}</td>
                   <td className="py-3">
                     <img className="h-20 dark:group-odd:bg-slate-600/50 dark:group-even:bg-slate-600/40 rounded-md" src={item.image} alt={item.name} />
