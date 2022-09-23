@@ -32,6 +32,7 @@ function EditProduct({ products, productData, setResultMessage }) {
   const handleChange = (e) => {
 
     if (e.target.type === 'file') {
+      //* Handle image size 
       if (e.target.files[0].size > 100000) {
         setForm({
           ...form,
@@ -46,6 +47,7 @@ function EditProduct({ products, productData, setResultMessage }) {
             </div>
           </div>
         )
+        //* Handle image type 
       } else if (e.target.files[0].type !== "image/jpeg" && e.target.files[0].type !== "image/png") {
         setForm({
           ...form,
@@ -63,6 +65,7 @@ function EditProduct({ products, productData, setResultMessage }) {
       }
     }
 
+    //* Handle form value must be number 
     switch (e.target.name) {
       case 'purchasePrice':
       case 'sellingPrice':
@@ -94,10 +97,10 @@ function EditProduct({ products, productData, setResultMessage }) {
         e.target.type === 'file' ? e.target.files : e.target.value,
     });
 
-    // Create image url for preview
+    //* Create image url for preview
     if (e.target.type === 'file') {
       let url = URL.createObjectURL(e.target.files[0]);
-      // URL digunakan untuk membuat URL dari gambar yang di-upload
+      //* URL digunakan untuk membuat URL dari gambar yang di-upload
       setPreview(url);
     }
   };
@@ -105,10 +108,10 @@ function EditProduct({ products, productData, setResultMessage }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    //* Handle product name must be unique 
     const existingProductName = products.filter((item) => {
       return form.name === item.name
     })
-
     if (existingProductName.length) {
       nameElement.current[0].className = "bg-red-50 border border-red-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-red-500 dark:placeholder-red-400"
       return setMessage(
@@ -122,6 +125,7 @@ function EditProduct({ products, productData, setResultMessage }) {
       )
     }
 
+    //* Displays an alert when choosing the wrong image (file size > 100KB or file type not jpg/png) 
     if (form.image === "wrong image") {
       return setMessage(
         <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
@@ -134,6 +138,7 @@ function EditProduct({ products, productData, setResultMessage }) {
       )
     }
 
+    //* Displays an alert when successfully editing the product 
     setResultMessage(
       <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-emerald-100 rounded-lg dark:bg-emerald-200" role="alert">
         <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-emerald-700 dark:text-emerald-800" />

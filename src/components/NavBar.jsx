@@ -5,8 +5,8 @@ import { Link } from 'react-router-dom'
 
 function NavBar({ isSideBarCollapse, setIsSideBarCollapse }) {
 
+  //* Toggle light mode and dark mode theme 
   const [theme, setTheme] = useState(localStorage.theme)
-
   const applyTheme = () => {
     localStorage.theme = theme
 

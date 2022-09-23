@@ -37,6 +37,7 @@ function AddProduct({ products, setResultMessage }) {
     nameElement.current[0].className = "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
 
     if (e.target.type === 'file') {
+      //* Handle image size 
       if (e.target.files[0].size > 100000) {
         setForm({
           ...form,
@@ -51,6 +52,7 @@ function AddProduct({ products, setResultMessage }) {
             </div>
           </div>
         )
+        //* Handle image type 
       } else if (e.target.files[0].type !== "image/jpeg" && e.target.files[0].type !== "image/png") {
         setForm({
           ...form,
@@ -68,6 +70,7 @@ function AddProduct({ products, setResultMessage }) {
       }
     }
 
+    //* Handle form value must be number 
     switch (e.target.name) {
       case 'purchasePrice':
       case 'sellingPrice':
@@ -98,10 +101,10 @@ function AddProduct({ products, setResultMessage }) {
         e.target.type === 'file' ? e.target.files : e.target.value,
     });
 
-    // Create image url for preview
+    //* Create image url for preview
     if (e.target.type === 'file') {
       let url = URL.createObjectURL(e.target.files[0]);
-      // URL digunakan untuk membuat URL dari gambar yang di-upload
+      //* URL digunakan untuk membuat URL dari gambar yang di-upload
       setPreview(url);
     }
   };
@@ -109,10 +112,10 @@ function AddProduct({ products, setResultMessage }) {
   const handleSubmit = (e) => {
     e.preventDefault()
 
+    //* Handle product name must be unique 
     const existingProductName = products.filter((item) => {
       return form.name.toLowerCase() === item.name.toLowerCase()
     })
-
     if (existingProductName.length) {
       nameElement.current[0].className = "bg-red-50 border border-red-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-red-500 dark:placeholder-red-400"
       return setMessage(
@@ -126,6 +129,7 @@ function AddProduct({ products, setResultMessage }) {
       )
     }
 
+    //* Check the empty form 
     for (const item in form) {
       if (form[item] === "") {
         return setMessage(
@@ -151,6 +155,7 @@ function AddProduct({ products, setResultMessage }) {
       }
     }
 
+    //* Displays an alert when successfully adding the product 
     setResultMessage(
       <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-emerald-100 rounded-lg dark:bg-emerald-200" role="alert">
         <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-emerald-700 dark:text-emerald-800" />

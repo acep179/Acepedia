@@ -13,6 +13,7 @@ function Products({ setTitle }) {
   const [productName, setProductName] = useState('')
   const [message, setMessage] = useState('')
 
+  //* Displays a Modal when user click edit button or delete button 
   const showModal = (item, type) => {
     setProductData(item)
     const modalBg = document.getElementById('modalBg')
@@ -28,6 +29,7 @@ function Products({ setTitle }) {
     deleteProductModal.style.display = 'flex'
   }
 
+  //* Search and Show Product 
   let searchProduct = products.filter((item) => {
     return item.name.toLowerCase().match(productName.toLowerCase())
   })

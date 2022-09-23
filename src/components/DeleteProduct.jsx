@@ -10,6 +10,7 @@ function DeleteProduct({ productData, setResultMessage }) {
     deleteProductModal.style.display = 'none'
   }
 
+  //* Displays an alert when successfully deleting the product 
   const handleDelete = () => {
     setResultMessage(
       <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-red-100 rounded-lg dark:bg-red-200" role="alert">
