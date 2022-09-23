@@ -24,8 +24,8 @@ function NavBar({ isSideBarCollapse, setIsSideBarCollapse }) {
   return (
     <nav className="bg-white text-slate-900 shadow dark:shadow-gray-500 border-gray-200 px-2 sm:px-4 py-4 rounded dark:bg-gray-900 fixed z-20 w-full">
       <div className="flex flex-wrap justify-between items-center mx-auto">
-        <div className="flex items-center">
-          <button>
+        <div className="flex items-center ">
+          <button className='hover:bg-slate-100 hover:border-l-2 hover:pl-1 hover:pr-0.5 hover:border-slate-500 transition-all duration-150 rounded-l dark:hover:bg-gray-700 dark:hover:border-slate-200'>
             <CgMenuLeft className='w-7 h-7 dark:text-slate-300' onClick={() => setIsSideBarCollapse(!isSideBarCollapse)} />
           </button>
           <Link to="/" className="ml-3 self-center text-xl font-semibold whitespace-nowrap dark:text-white">Nutechpedia</Link>

@@ -1,5 +1,5 @@
 import { products } from "../fakeData/products"
-import { AiOutlineEdit } from 'react-icons/ai'
+import { AiFillEdit } from 'react-icons/ai'
 import { IoTrashBin, IoTriangle } from 'react-icons/io5'
 import { AddProduct, DeleteProduct, EditProduct } from "../components"
 import { useState } from "react"
@@ -66,24 +66,26 @@ function Products({ setTitle }) {
           <tbody>
             {searchProduct.map((item, index) => {
               return (
-                <tr className="bg-white border-b border-slate-500 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900" key={index}>
+                <tr className="bg-white border-b border-slate-300 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
                   <td className="text-center font-bold">{index + 1}</td>
-                  <td className="py-3"><img className="h-20" src={item.image} alt={item.name} /></td>
+                  <td className="py-3">
+                    <img className="h-20 dark:group-odd:bg-slate-600/50 dark:group-even:bg-slate-600/40 rounded-md" src={item.image} alt={item.name} />
+                  </td>
                   <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">{item.name}</td>
                   <td className="text-center">{item.purchasePrice}</td>
                   <td className="text-center">{item.sellingPrice}</td>
                   <td className="text-center">{item.qty}</td>
                   <td className="text-center">
-                    <button className='bg-red-500 hover:bg-red-600 px-2 py-1 ml-auto mr-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'delete')}>
-                      <IoTrashBin className="w-5 h-5" />
-                      <div className='hidden group-hover:block ml-2 absolute bg-red-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
+                    <button className='bg-red-500 hover:bg-red-600 ml-auto mr-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'delete')}>
+                      <IoTrashBin className="w-5 h-5 peer" />
+                      <div className='hidden peer-hover:block ml-2 absolute bg-red-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
                         <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-red-50" />
                         <p className='font-semibold text-red-700'>Remove Product</p>
                       </div>
                     </button>
-                    <button className='bg-emerald-500 hover:bg-emerald-600 px-2 py-1 mr-auto ml-1 text-white text-sm rounded-md group relative' onClick={() => showModal(item, 'edit')}>
-                      <AiOutlineEdit className="w-5 h-5" />
-                      <div className='hidden group-hover:block ml-2 absolute bg-emerald-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
+                    <button className='bg-emerald-500 hover:bg-emerald-600 mr-auto ml-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'edit')}>
+                      <AiFillEdit className="w-5 h-5 peer" />
+                      <div className='hidden peer-hover:block ml-2 absolute bg-emerald-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
                         <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-emerald-50" />
                         <p className='font-semibold text-emerald-600'>Edit Product</p>
                       </div>
@@ -97,7 +99,7 @@ function Products({ setTitle }) {
       </div>
 
       <nav className="flex justify-between items-center pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-10</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-5</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
         <ul className="inline-flex items-center -space-x-px">
           <li>
             <button href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
