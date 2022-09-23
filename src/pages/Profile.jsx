@@ -1,8 +1,8 @@
 import { UnderDevelopment } from "../components"
 
-function Profile({ setTilte }) {
+function Profile({ setTitle }) {
 
-  setTilte('Profile')
+  setTitle('Profile')
 
   return (
     <div className="flex flex-col">

@@ -10,7 +10,7 @@ function SideBar({ sideBarWidth, title }) {
 
     <aside className="before:block before:w-full min-w-[] before:mb-14 duration-300" style={{ width: sideBarWidth }} aria-label="Sidebar" id="sideBar">
       <div className="fixed z-10 py-4 px-3 bg-gray-50 shadow-md shadow-slate-400 rounded dark:bg-gray-800" id="fixedSideBar">
-        <Link to="/profile" className='mb-5 flex items-center mr-3 px-2 text-sm text-left rounded-md md:mr-0 hover:bg-slate-100 hover:border-l-2 hover:border-slate-500 dark:hover:border-slate-200 transition-all duration-150 dark:hover:bg-gray-700'>
+        <Link to="/profile" className={`flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-slate-100 hover:border-l-2 hover:border-slate-500 dark:hover:border-slate-200 mb-5 mt-3 ${title === 'Profile' && 'bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-900 dark:hover:bg-emerald-800 border-l-2 border-emerald-500 hover:border-emerald-600 dark:hover:border-emerald-400'} transition-all duration-150 dark:hover:bg-gray-700`}>
           <span className="sr-only">Open user menu</span>
           <img className="w-10 h-10 my-3 rounded-full" src={profileImage} alt="user" />
           <div className="ml-4" data-sidebar="text">
