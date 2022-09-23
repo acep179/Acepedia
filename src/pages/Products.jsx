@@ -1,3 +1,4 @@
+import convertRupiah from 'rupiah-format'
 import { products } from "../fakeData/products"
 import { AiFillEdit } from 'react-icons/ai'
 import { IoTrashBin, IoTriangle } from 'react-icons/io5'
@@ -55,10 +56,10 @@ function Products({ setTitle }) {
           <thead className="text-xs tracking-wider text-slate-50 uppercase bg-amber-500 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th className="py-3 px-6">No</th>
-              <th className="py-3 px-6">Image</th>
-              <th className="py-3 px-6">Name</th>
-              <th className="py-3 px-6">Purchase Price</th>
-              <th className="py-3 px-6">Selling Price</th>
+              <th className="py-3 pl-1 text-left">Image</th>
+              <th className="py-3 px-6 text-left">Name</th>
+              <th className="py-3 px-6 text-left">Purchase Price</th>
+              <th className="py-3 px-6 text-left">Selling Price</th>
               <th className="py-3 px-6">Stock</th>
               <th className="py-3 px-6">Action</th>
             </tr>
@@ -72,8 +73,8 @@ function Products({ setTitle }) {
                     <img className="h-20 dark:group-odd:bg-slate-600/50 dark:group-even:bg-slate-600/40 rounded-md" src={item.image} alt={item.name} />
                   </td>
                   <td className="py-4 px-6 font-semibold text-gray-900 dark:text-white">{item.name}</td>
-                  <td className="text-center">{item.purchasePrice}</td>
-                  <td className="text-center">{item.sellingPrice}</td>
+                  <td className="py-4 px-6">{convertRupiah.convert(item.purchasePrice)}</td>
+                  <td className="py-4 px-6">{convertRupiah.convert(item.sellingPrice)}</td>
                   <td className="text-center">{item.qty}</td>
                   <td className="text-center">
                     <button className='bg-red-500 hover:bg-red-600 ml-auto mr-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'delete')}>
