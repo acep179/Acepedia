@@ -11,6 +11,7 @@ function Products({ setTitle }) {
 
   const [productData, setProductData] = useState({})
   const [productName, setProductName] = useState('')
+  const [showProducts, setShowProducts] = useState([])
   const [message, setMessage] = useState('')
 
   //* Displays a Modal when user click edit button or delete button 
@@ -33,6 +34,23 @@ function Products({ setTitle }) {
   let searchProduct = products.filter((item) => {
     return item.name.toLowerCase().match(productName.toLowerCase())
   })
+
+  //* Paginatioin 
+  let totalPage = Math.ceil(searchProduct.length / 3)
+  let pages = []
+  for (let i = 0; i < totalPage; i++) {
+    pages.push(i);
+  }
+
+  const paginationProducts = (item) => {
+    const result = searchProduct.slice((item - 1) * 3, item * 3)
+    setShowProducts(result)
+  }
+
+  if (showProducts.length === 0) {
+    const result = searchProduct.slice(0, 3)
+    setShowProducts(result)
+  }
 
   return (
     <div className="mb-5 mx-auto">
@@ -69,7 +87,7 @@ function Products({ setTitle }) {
             </tr>
           </thead>
           <tbody>
-            {searchProduct.map((item, index) => {
+            {showProducts.map((item, index) => {
               return (
                 <tr className="bg-white border-b text-gray-800 border-slate-300 dark:text-gray-400 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
                   <td className="text-center font-semibold">{index + 1}</td>
@@ -104,7 +122,7 @@ function Products({ setTitle }) {
       </div>
 
       <nav className="flex justify-between items-center pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-5</span> of <span className="font-semibold text-gray-900 dark:text-white">1000</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-5</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProduct.length}</span></span>
         <ul className="inline-flex items-center -space-x-px">
           <li>
             <button href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -112,10 +130,14 @@ function Products({ setTitle }) {
               <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
             </button>
           </li>
-          <li>
-            <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</button>
-          </li>
-          <li>
+          {pages.map((item) => {
+            return (
+              <li onClick={() => paginationProducts(item)}>
+                <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{++item}</button>
+              </li>
+            )
+          })}
+          {/* <li>
             <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</button>
           </li>
           <li>
@@ -126,7 +148,7 @@ function Products({ setTitle }) {
           </li>
           <li>
             <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</button>
-          </li>
+          </li> */}
           <li>
             <button href="#" className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
               <span className="sr-only">Next</span>
