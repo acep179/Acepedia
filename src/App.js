@@ -5,6 +5,7 @@ import { Dashboard,Inbox,Customers, Products, Profile } from './pages';
 
 function App() {
 
+  //* Set dark mode when first time visiting the website 
   if(!localStorage.theme){
     localStorage.theme = 'dark'
   }
@@ -17,11 +18,13 @@ function App() {
 
   const sideBarCollapse = () => {
 
+    //* Hide text when sidebar is collapse 
     const elements = document.querySelectorAll('[data-sidebar="text"]')
     elements.forEach(element => {
       element.classList.toggle('hidden')
     });
 
+    //* centering icon and profile image when sidebar collapse 
     const listParent = document.querySelector('[data-sidebar="list-parent"]')
     listParent.classList.toggle('items-center')
 

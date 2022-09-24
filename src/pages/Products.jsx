@@ -10,7 +10,9 @@ function Products({ setTitle }) {
   setTitle('Products')
 
   const [productData, setProductData] = useState({})
-  const [productName, setProductName] = useState('')
+  const [searchProductData, setSearchProductData] = useState([])
+  const [pages, setPages] = useState([])
+  const [dataPerPage, setDataPerPage] = useState(3)
   const [showProducts, setShowProducts] = useState([])
   const [message, setMessage] = useState('')
 
@@ -31,25 +33,68 @@ function Products({ setTitle }) {
   }
 
   //* Search and Show Product 
-  let searchProduct = products.filter((item) => {
-    return item.name.toLowerCase().match(productName.toLowerCase())
-  })
+  const searchProduct = (e) => {
 
-  //* Paginatioin 
-  let totalPage = Math.ceil(searchProduct.length / 3)
-  let pages = []
-  for (let i = 0; i < totalPage; i++) {
-    pages.push(i);
+    let data = products.filter((item) => {
+      return item.name.toLowerCase().match(e.target.value.toLowerCase())
+    })
+
+    setSearchProductData(data)
+    const result = data.slice(0, dataPerPage)
+    setShowProducts(result)
+
+    let totalPage = Math.ceil(data.length / dataPerPage)
+    let pageTemporary = []
+    for (let i = 0; i < totalPage; i++) {
+      pageTemporary.push(i);
+    }
+
+    setPages(pageTemporary)
   }
 
+  if (!searchProductData.length) {
+    setSearchProductData(products)
+  }
+
+  //* Paginatioin 
+
   const paginationProducts = (item) => {
-    const result = searchProduct.slice((item - 1) * 3, item * 3)
+    const result = searchProductData.slice((item - 1) * dataPerPage, item * dataPerPage)
+    console.log(result)
     setShowProducts(result)
   }
 
   if (showProducts.length === 0) {
-    const result = searchProduct.slice(0, 3)
+    const result = products.slice(0, 3)
     setShowProducts(result)
+
+    let totalPage = Math.ceil(products.length / dataPerPage)
+    let pageTemporary = []
+    for (let i = 0; i < totalPage; i++) {
+      pageTemporary.push(i);
+    }
+
+    setPages(pageTemporary)
+  }
+
+  const handleDataPerPage = (e) => {
+    if (Number(e.target.value) === 0) {
+      setTimeout(() => e.target.value = dataPerPage, 2000)
+      return
+    }
+
+    setDataPerPage(Number(e.target.value))
+
+    const result = searchProductData.slice(0, Number(e.target.value))
+    setShowProducts(result)
+
+    let totalPage = Math.ceil(searchProductData.length / Number(e.target.value))
+    let pageTemporary = []
+    for (let i = 0; i < totalPage; i++) {
+      pageTemporary.push(i);
+    }
+
+    setPages(pageTemporary)
   }
 
   return (
@@ -62,9 +107,9 @@ function Products({ setTitle }) {
             <label htmlFor="table-search" className="sr-only">Search</label>
             <div className="relative mt-1">
               <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                <svg className="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd"></path></svg>
               </div>
-              <input type="text" id="table-search" className="block p-2 pl-10 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items" onChange={(e) => setProductName(e.target.value)} />
+              <input type="text" id="table-search" className="block p-2 pl-10 w-80 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items" onChange={(e) => searchProduct(e)} />
             </div>
           </div>
         </div>
@@ -72,6 +117,14 @@ function Products({ setTitle }) {
         <EditProduct products={products} productData={productData} setResultMessage={setMessage} />
         <DeleteProduct productData={productData} setResultMessage={setMessage} />
       </div>
+
+      <form className='mb-5'>
+        <label className='cursor-pointer flex items-center w-max' htmlFor='perPage'>
+          <p>Showing</p>
+          <input id='perPage' className='mx-2 focus:pl-2 peer' size={dataPerPage.toString().length} type='text' onChange={(e) => handleDataPerPage(e)} />
+          <p className='-m-8 peer-focus:m-0'>Products per page</p>
+        </label>
+      </form>
 
       <div className="overflow-x-auto relative shadow-md dark:shadow-md dark:shadow-slate-500 sm:rounded-lg">
         <table className="table-auto w-full text-sm text-gray-500 dark:text-gray-400">
@@ -122,37 +175,25 @@ function Products({ setTitle }) {
       </div>
 
       <nav className="flex justify-between items-center pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-5</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProduct.length}</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-5</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProductData.length}</span></span>
         <ul className="inline-flex items-center -space-x-px">
           <li>
             <button href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
               <span className="sr-only">Previous</span>
-              <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+              <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
             </button>
           </li>
-          {pages.map((item) => {
+          {pages.map((item, index) => {
             return (
-              <li onClick={() => paginationProducts(item)}>
+              <li key={index} onClick={() => paginationProducts(item)}>
                 <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{++item}</button>
               </li>
             )
           })}
-          {/* <li>
-            <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</button>
-          </li>
-          <li>
-            <button href="#" aria-current="page" className="z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</button>
-          </li>
-          <li>
-            <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</button>
-          </li>
-          <li>
-            <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</button>
-          </li> */}
           <li>
             <button href="#" className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
               <span className="sr-only">Next</span>
-              <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+              <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
             </button>
           </li>
         </ul>
