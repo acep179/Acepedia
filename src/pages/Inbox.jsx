@@ -1,8 +1,6 @@
 import { UnderDevelopment } from "../components"
 
-function Inbox({ setTitle }) {
-
-  setTitle('Inbox')
+function Inbox() {
 
   return (
     <div className="flex flex-col">

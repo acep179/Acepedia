@@ -1,8 +1,6 @@
 import { UnderDevelopment } from "../components"
 
-function Customers({ setTitle }) {
-
-  setTitle('Customers')
+function Customers() {
 
   return (
     <div className="flex flex-col">

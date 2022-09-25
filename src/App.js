@@ -1,17 +1,49 @@
 import { useEffect, useState } from 'react';
-import {Routes, Route} from 'react-router-dom'
+import {Routes, Route, useLocation} from 'react-router-dom'
 import { NavBar, SideBar } from './components';
 import { Dashboard,Inbox,Customers, Products, Profile } from './pages';
 
 function App() {
+
+  const location=useLocation()
 
   //* Set dark mode when first time visiting the website 
   if(!localStorage.theme){
     localStorage.theme = 'dark'
   }
 
-  const [title, setTitle] =useState()
-  document.title = 'Nutechpedia | ' + title
+  const [title, setTitle] = useState('')
+
+  useEffect(() => {
+
+    let temporaryTitle
+
+    switch (location.pathname) {
+
+      case '/inbox':
+        temporaryTitle = 'Inbox'
+        break;
+    
+      case '/customers':
+        temporaryTitle = 'Customers'
+        break;
+    
+      case '/products':
+        temporaryTitle = 'Products'
+        break;
+    
+      case '/profile':
+        temporaryTitle = 'Profile'
+        break;
+    
+      default:
+        temporaryTitle = 'Dashboard'
+        break;
+    }
+
+    setTitle(temporaryTitle)
+    document.title = 'Nutechpedia | ' + temporaryTitle
+  },[location])
 
   const [isSideBarCollapse, setIsSideBarCollapse] = useState(true)
   const [sideBarWidth, setSideBarWidth] = useState('')
@@ -43,11 +75,11 @@ function App() {
         <SideBar sideBarWidth={sideBarWidth} title={title} />
         <div className='mt-20 px-4 mx-auto w-3/4'>
           <Routes>
-            <Route path='/' element={<Dashboard setTitle={setTitle}/>} />
-            <Route path='/inbox' element={<Inbox setTitle={setTitle}/>} />
-            <Route path='/customers' element={<Customers setTitle={setTitle}/>} />
-            <Route path='/products' element={<Products setTitle={setTitle}/>} />
-            <Route path='/profile' element={<Profile setTitle={setTitle}/>} />
+            <Route path='/' element={<Dashboard/>} />
+            <Route path='/inbox' element={<Inbox/>} />
+            <Route path='/customers' element={<Customers/>} />
+            <Route path='/products' element={<Products/>} />
+            <Route path='/profile' element={<Profile/>} />
           </Routes>
         </div>
       </div>

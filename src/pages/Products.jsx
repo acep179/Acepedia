@@ -1,20 +1,20 @@
 import convertRupiah from 'rupiah-format'
 import { products } from "../fakeData/products"
-import { AiFillEdit } from 'react-icons/ai'
+import { AiFillEdit, AiOutlineEdit } from 'react-icons/ai'
 import { IoTrashBin, IoTriangle } from 'react-icons/io5'
 import { AddProduct, DeleteProduct, EditProduct } from "../components"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
-function Products({ setTitle }) {
-
-  setTitle('Products')
+function Products() {
 
   const [productData, setProductData] = useState({})
   const [searchProductData, setSearchProductData] = useState([])
   const [pages, setPages] = useState([])
+  const [pageNow, setPageNow] = useState(1)
   const [dataPerPage, setDataPerPage] = useState(3)
   const [showProducts, setShowProducts] = useState([])
   const [message, setMessage] = useState('')
+  const timeOut = useRef()
 
   //* Displays a Modal when user click edit button or delete button 
   const showModal = (item, type) => {
@@ -49,6 +49,7 @@ function Products({ setTitle }) {
       pageTemporary.push(i);
     }
 
+    setPageNow(1)
     setPages(pageTemporary)
   }
 
@@ -60,7 +61,27 @@ function Products({ setTitle }) {
 
   const paginationProducts = (item) => {
     const result = searchProductData.slice((item - 1) * dataPerPage, item * dataPerPage)
-    console.log(result)
+    setPageNow(item)
+    setShowProducts(result)
+  }
+
+  const onPrevious = () => {
+    let pagePrevious = pageNow - 1
+    if (pagePrevious === 0) {
+      pagePrevious = 1
+    }
+    const result = searchProductData.slice((pagePrevious - 1) * dataPerPage, pagePrevious * dataPerPage)
+    setPageNow(pagePrevious)
+    setShowProducts(result)
+  }
+
+  const onNext = () => {
+    let pageNext = pageNow + 1
+    if (pageNext > pages.length) {
+      pageNext = pageNow
+    }
+    const result = searchProductData.slice((pageNext - 1) * dataPerPage, pageNext * dataPerPage)
+    setPageNow(pageNext)
     setShowProducts(result)
   }
 
@@ -75,13 +96,22 @@ function Products({ setTitle }) {
     }
 
     setPages(pageTemporary)
+
+    timeOut.current = setTimeout(() => {
+      const perPage = document.getElementById('perPage')
+      if (perPage) {
+        perPage.value = 3
+      }
+    }, 2000)
   }
 
   const handleDataPerPage = (e) => {
     if (Number(e.target.value) === 0) {
-      setTimeout(() => e.target.value = dataPerPage, 2000)
+      timeOut.current = setTimeout(() => e.target.value = dataPerPage, 2000)
       return
     }
+
+    clearTimeout(timeOut.current)
 
     setDataPerPage(Number(e.target.value))
 
@@ -94,6 +124,7 @@ function Products({ setTitle }) {
       pageTemporary.push(i);
     }
 
+    setPageNow(1)
     setPages(pageTemporary)
   }
 
@@ -121,8 +152,9 @@ function Products({ setTitle }) {
       <form className='mb-5'>
         <label className='cursor-pointer flex items-center w-max' htmlFor='perPage'>
           <p>Showing</p>
-          <input id='perPage' className='mx-2 focus:pl-2 peer' size={dataPerPage.toString().length} type='text' onChange={(e) => handleDataPerPage(e)} />
-          <p className='-m-8 peer-focus:m-0'>Products per page</p>
+          <input id='perPage' className='mx-2 focus:pl-2 peer bg-inherit' size={dataPerPage.toString().length} type='text' onChange={(e) => handleDataPerPage(e)} />
+          <p className='-ml-8 peer-focus:ml-0'>Products per page</p>
+          <AiOutlineEdit className='ml-2' />
         </label>
       </form>
 
@@ -178,7 +210,7 @@ function Products({ setTitle }) {
         <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-5</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProductData.length}</span></span>
         <ul className="inline-flex items-center -space-x-px">
           <li>
-            <button href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            <button href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" onClick={onPrevious}>
               <span className="sr-only">Previous</span>
               <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
             </button>
@@ -186,12 +218,12 @@ function Products({ setTitle }) {
           {pages.map((item, index) => {
             return (
               <li key={index} onClick={() => paginationProducts(item)}>
-                <button href="#" className="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{++item}</button>
+                <button href="#" className={`py-2 px-3 leading-tight ${pageNow === (item + 1) ? 'z-10 py-2 px-3 leading-tight text-blue-600 bg-blue-50 border border-blue-300 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'} `}>{++item}</button>
               </li>
             )
           })}
           <li>
-            <button href="#" className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            <button href="#" className="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" onClick={onNext}>
               <span className="sr-only">Next</span>
               <svg className="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd"></path></svg>
             </button>

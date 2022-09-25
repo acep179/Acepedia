@@ -1,8 +1,6 @@
 import { UnderDevelopment } from "../components"
 
-function Dashboard({ setTitle }) {
-
-  setTitle('Dashboard')
+function Dashboard() {
 
   return (
     <div className="flex flex-col">
