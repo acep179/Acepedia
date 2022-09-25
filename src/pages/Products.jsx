@@ -49,6 +49,12 @@ function Products() {
       pageTemporary.push(i);
     }
 
+    if (dataPerPage > data.length) {
+      // setTimeout(() => {
+      document.getElementById('perPage').value = data.length
+      // }, 2000)
+    }
+
     setPageNow(1)
     setPages(pageTemporary)
   }
@@ -126,6 +132,10 @@ function Products() {
 
     setPageNow(1)
     setPages(pageTemporary)
+
+    if (e.target.value > searchProductData.length) {
+      e.target.value = searchProductData.length
+    }
   }
 
   return (
