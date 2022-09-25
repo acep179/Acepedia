@@ -175,7 +175,7 @@ function Products() {
             {showProducts.map((item, index) => {
               return (
                 <tr className="bg-white border-b text-gray-800 border-slate-300 dark:text-gray-400 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
-                  <td className="text-center font-semibold">{index + 1}</td>
+                  <td className="text-center font-semibold">{(index + 1) + ((pageNow - 1) * dataPerPage)}</td>
                   <td className="py-3">
                     <img className="h-20 dark:group-odd:bg-slate-600/50 dark:group-even:bg-slate-600/40 rounded-md" src={item.image} alt={item.name} />
                   </td>
@@ -207,7 +207,7 @@ function Products() {
       </div>
 
       <nav className="flex justify-between items-center pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">1-5</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProductData.length}</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{(dataPerPage * pageNow) - dataPerPage + 1 === searchProductData.length ? '' : (dataPerPage * pageNow) - dataPerPage + 1 === dataPerPage * pageNow ? '' : (dataPerPage * pageNow) - dataPerPage + 1 + ' - '}{dataPerPage * pageNow > searchProductData.length ? searchProductData.length : dataPerPage * pageNow}</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProductData.length}</span></span>
         <ul className="inline-flex items-center -space-x-px">
           <li>
             <button href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" onClick={onPrevious}>
