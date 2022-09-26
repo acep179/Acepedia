@@ -3,7 +3,7 @@ import { BiAddToQueue } from 'react-icons/bi'
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { IoClose } from 'react-icons/io5';
 
-function AddProduct({ products, setResultMessage }) {
+function AddProduct({ products, setResultMessage, searchProduct, setSearchProductData }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -95,18 +95,20 @@ function AddProduct({ products, setResultMessage }) {
 
     setMessage('')
 
-    setForm({
-      ...form,
-      [e.target.name]:
-        e.target.type === 'file' ? e.target.files : e.target.value,
-    });
-
     //* Create image url for preview
+    let url
     if (e.target.type === 'file') {
-      let url = URL.createObjectURL(e.target.files[0]);
+      url = URL.createObjectURL(e.target.files[0]);
       //* URL digunakan untuk membuat URL dari gambar yang di-upload
       setPreview(url);
     }
+
+    setForm({
+      ...form,
+      [e.target.name]:
+        e.target.type === 'file' ? url : e.target.value,
+    });
+
   };
 
   const handleSubmit = (e) => {
@@ -154,6 +156,12 @@ function AddProduct({ products, setResultMessage }) {
 
       }
     }
+
+    //* Add form input to products data
+    products.push(form)
+    setSearchProductData([])
+    searchProduct(form.name)
+    document.getElementById('searchProductInput').value = form.name
 
     //* Displays an alert when successfully adding the product 
     setResultMessage(
