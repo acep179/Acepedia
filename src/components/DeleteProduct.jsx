@@ -1,30 +1,6 @@
 import { IoClose } from 'react-icons/io5';
-import { BsFillExclamationCircleFill } from 'react-icons/bs'
 
-function DeleteProduct({ productData, setResultMessage }) {
-
-  const close = () => {
-    const modalBg = document.getElementById('modalBg')
-    const deleteProductModal = document.getElementById('deleteProductModal')
-    modalBg.style.display = 'none'
-    deleteProductModal.style.display = 'none'
-  }
-
-  //* Displays an alert when successfully deleting the product 
-  const handleDelete = () => {
-    setResultMessage(
-      <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-red-100 rounded-lg dark:bg-red-200" role="alert">
-        <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
-        <span className="sr-only">Info</span>
-        <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
-          {productData.name} has been removed
-        </div>
-      </div>
-    )
-
-    close()
-    setTimeout(() => setResultMessage(''), 5000)
-  }
+function DeleteProduct({ handleDelete, product, close }) {
 
   return (
     <>
@@ -38,7 +14,7 @@ function DeleteProduct({ productData, setResultMessage }) {
               <span className="sr-only">Close modal</span>
             </button>
             <div className="py-6 px-6 lg:px-8">
-              <h3 className="text-xl font-medium text-gray-900 dark:text-white text-center mb-5">Delete {productData.name}?</h3>
+              <h3 className="text-xl font-medium text-gray-900 dark:text-white text-center mb-5">Delete {product?.data?.name}?</h3>
               <div className='flex justify-center gap-2'>
                 <button className='bg-emerald-500 w-1/3 hover:bg-emerald-600 px-2 py-1 text-white text-sm rounded-md group relative' onClick={close}>
                   <p className='font-semibold text-center'>Cancel</p>

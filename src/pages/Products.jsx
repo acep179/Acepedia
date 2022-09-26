@@ -2,6 +2,7 @@ import convertRupiah from 'rupiah-format'
 import { products } from "../fakeData/products"
 import { AiFillEdit, AiOutlineEdit } from 'react-icons/ai'
 import { IoTrashBin, IoTriangle } from 'react-icons/io5'
+import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { AddProduct, DeleteProduct, EditProduct } from "../components"
 import { useRef, useState } from "react"
 
@@ -17,8 +18,8 @@ function Products() {
   const timeOut = useRef()
 
   //* Displays a Modal when user click edit button or delete button 
-  const showModal = (item, type) => {
-    setProductData(item)
+  const showModal = (data, type, index) => {
+    setProductData({ index: (index + 1) + ((pageNow - 1) * dataPerPage), data })
     const modalBg = document.getElementById('modalBg')
     modalBg.style.display = 'block'
 
@@ -30,6 +31,42 @@ function Products() {
 
     const deleteProductModal = document.getElementById('deleteProductModal')
     deleteProductModal.style.display = 'flex'
+  }
+
+  const closeModal = () => {
+    const modalBg = document.getElementById('modalBg')
+    const deleteProductModal = document.getElementById('deleteProductModal')
+    modalBg.style.display = 'none'
+    deleteProductModal.style.display = 'none'
+  }
+
+  //* Handle Delete 
+  const handleDelete = () => {
+
+    products.splice(productData.index - 1, 1)
+
+    let totalPage = Math.ceil(searchProductData.length / dataPerPage)
+    let pageTemporary = []
+    for (let i = 0; i < totalPage; i++) {
+      pageTemporary.push(i);
+    }
+    setPages(pageTemporary)
+
+    const result = products.slice((pageNow - 1) * dataPerPage, pageNow * dataPerPage)
+    setShowProducts(result)
+
+    setMessage(
+      <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+        <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+        <span className="sr-only">Info</span>
+        <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
+          {productData.data.name} has been removed
+        </div>
+      </div>
+    )
+
+    closeModal()
+    setTimeout(() => setMessage(''), 5000)
   }
 
   //* Search and Show Product 
@@ -50,9 +87,7 @@ function Products() {
     }
 
     if (dataPerPage > data.length) {
-      // setTimeout(() => {
       document.getElementById('perPage').value = data.length
-      // }, 2000)
     }
 
     setPageNow(1)
@@ -154,9 +189,9 @@ function Products() {
             </div>
           </div>
         </div>
-        <AddProduct products={products} setResultMessage={setMessage} searchProduct={searchProduct} setSearchProductData={setSearchProductData} />
+        <AddProduct products={products} setResultMessage={setMessage} setPages={setPages} dataPerPage={dataPerPage} setPageNow={setPageNow} setShowProducts={setShowProducts} />
         <EditProduct products={products} productData={productData} setResultMessage={setMessage} />
-        <DeleteProduct productData={productData} setResultMessage={setMessage} />
+        <DeleteProduct handleDelete={handleDelete} product={productData} products={products} close={closeModal} />
       </div>
 
       <form className='mb-5'>
@@ -194,14 +229,14 @@ function Products() {
                   <td className="py-4 px-6">{convertRupiah.convert(item.sellingPrice)}</td>
                   <td className="text-center">{item.qty}</td>
                   <td className="text-center">
-                    <button className='bg-red-500 hover:bg-red-600 ml-auto mr-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'delete')}>
+                    <button className='bg-red-500 hover:bg-red-600 ml-auto mr-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'delete', index)}>
                       <IoTrashBin className="w-5 h-5 peer" />
                       <div className='hidden peer-hover:block ml-2 absolute bg-red-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
                         <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-red-50" />
                         <p className='font-semibold text-red-700'>Remove Product</p>
                       </div>
                     </button>
-                    <button className='bg-emerald-500 hover:bg-emerald-600 mr-auto ml-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'edit')}>
+                    <button className='bg-emerald-500 hover:bg-emerald-600 mr-auto ml-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'edit', index)}>
                       <AiFillEdit className="w-5 h-5 peer" />
                       <div className='hidden peer-hover:block ml-2 absolute bg-emerald-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
                         <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-emerald-50" />

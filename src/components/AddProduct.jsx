@@ -3,7 +3,7 @@ import { BiAddToQueue } from 'react-icons/bi'
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { IoClose } from 'react-icons/io5';
 
-function AddProduct({ products, setResultMessage, searchProduct, setSearchProductData }) {
+function AddProduct({ products, dataPerPage, setPages, setPageNow, setShowProducts, setResultMessage }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -159,9 +159,19 @@ function AddProduct({ products, setResultMessage, searchProduct, setSearchProduc
 
     //* Add form input to products data
     products.push(form)
-    setSearchProductData([])
-    searchProduct(form.name)
-    document.getElementById('searchProductInput').value = form.name
+
+    let totalPage = Math.ceil(products.length / dataPerPage)
+
+    let pageTemporary = []
+    for (let i = 0; i < totalPage; i++) {
+      pageTemporary.push(i);
+    }
+
+    setPages(pageTemporary)
+    setPageNow(totalPage)
+
+    const result = products.slice((totalPage - 1) * dataPerPage, totalPage * dataPerPage)
+    setShowProducts(result)
 
     //* Displays an alert when successfully adding the product 
     setResultMessage(
