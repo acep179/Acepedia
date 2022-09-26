@@ -1,7 +1,8 @@
 import { CgMenuLeft } from 'react-icons/cg'
-import { BsLightbulb, BsLightbulbOff } from 'react-icons/bs'
+import { BsGithub, BsLightbulb, BsLightbulbOff } from 'react-icons/bs'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { IoTriangle } from 'react-icons/io5'
 
 function NavBar({ isSideBarCollapse, setIsSideBarCollapse }) {
 
@@ -31,11 +32,24 @@ function NavBar({ isSideBarCollapse, setIsSideBarCollapse }) {
           <Link to="/" className="ml-3 self-center text-xl font-semibold whitespace-nowrap dark:text-white">Nutechpedia</Link>
         </div>
         <div className="flex items-center md:order-2 mr-3">
-          {theme === 'light' ?
-            <BsLightbulb className='w-6 h-6 cursor-pointer' onClick={() => setTheme('dark')} />
-            :
-            <BsLightbulbOff className='w-6 h-6 cursor-pointer text-slate-300' onClick={() => setTheme('light')} />
-          }
+          <a className='relative' href="https://github.com/acep179/Nutechpedia" target='_blank' rel="noreferrer">
+            <BsGithub className='w-6 h-6 mr-3 dark:text-slate-300 dark:h7 dark:w-7 peer' />
+            <div className='hidden peer-hover:block ml-2 absolute bg-gray-600 dark:bg-slate-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-12 right-0 z-10'>
+              <IoTriangle className="w-6 h-6 absolute -top-4 right-3 dark:fill-slate-50" />
+              <p className='font-semibold text-slate-50 dark:text-slate-600'>See Source Code</p>
+            </div>
+          </a>
+          <button className='relative'>
+            {theme === 'light' ?
+              <BsLightbulb className='w-6 h-6 peer' onClick={() => setTheme('dark')} />
+              :
+              <BsLightbulbOff className='w-6 h-6 peer text-slate-300' onClick={() => setTheme('light')} />
+            }
+            <div className='hidden peer-hover:block ml-2 absolute bg-gray-600 dark:bg-slate-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-12 right-0 z-10'>
+              <IoTriangle className="w-6 h-6 absolute -top-4 right-0 dark:fill-slate-50" />
+              <p className='font-semibold text-slate-50 dark:text-slate-600'>Toggle Theme</p>
+            </div>
+          </button>
         </div>
       </div>
     </nav>
