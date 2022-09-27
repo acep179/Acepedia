@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {Routes, Route, useLocation} from 'react-router-dom'
 import { NavBar, SideBar } from './components';
-import { Dashboard,Inbox,Customers, Products, Profile } from './pages';
+import { Dashboard,Inbox,Customers, Products,ProductsAPI, Profile } from './pages';
 
 function App() {
 
@@ -30,6 +30,10 @@ function App() {
     
       case '/products':
         temporaryTitle = 'Products'
+        break;
+
+      case '/products-api':
+        temporaryTitle = 'Products API'
         break;
     
       case '/profile':
@@ -79,6 +83,7 @@ function App() {
             <Route path='/inbox' element={<Inbox/>} />
             <Route path='/customers' element={<Customers/>} />
             <Route path='/products' element={<Products/>} />
+            <Route path='/products-api' element={<ProductsAPI/>} />
             <Route path='/profile' element={<Profile/>} />
           </Routes>
         </div>

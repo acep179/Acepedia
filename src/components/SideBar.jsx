@@ -45,6 +45,12 @@ function SideBar({ sideBarWidth, title }) {
                 <span className="flex-1 ml-3 whitespace-nowrap" data-sidebar="text">Products</span>
               </Link>
             </li>
+            <li>
+              <Link to="/products-api" className={`flex items-center p-2 text-base font-normal text-gray-900 rounded-lg     dark:text-white mb-5 transition-all duration-150 ${title === 'Products API' ? ('bg-emerald-100 hover:bg-emerald-200 dark:bg-emerald-900 dark:hover:bg-emerald-800 border-l-2 border-emerald-500 hover:border-emerald-600 dark:hover:border-emerald-400') : ('hover:bg-slate-100 hover:border-l-2 hover:border-slate-500 dark:hover:border-slate-200 dark:hover:bg-gray-700')}`}>
+                <BsBoxSeam className='flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white' />
+                <span className="flex-1 ml-3 whitespace-nowrap" data-sidebar="text">Products API</span>
+              </Link>
+            </li>
           </ul>
           <div>
             <button className="flex items-center mb-5 p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-red-100 hover:border-l-2 hover:border-red-500 dark:hover:border-red-200 transition-all duration-150 dark:hover:bg-red-900 w-full">
