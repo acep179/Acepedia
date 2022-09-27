@@ -1,14 +1,15 @@
 import convertRupiah from 'rupiah-format'
-import { products } from "../fakeData/products"
 import { AiFillEdit, AiOutlineEdit } from 'react-icons/ai'
 import { IoTrashBin, IoTriangle } from 'react-icons/io5'
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { BiAddToQueue } from 'react-icons/bi'
 import { AddProduct, DeleteProduct, EditProduct } from "../components"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { API } from '../config/api';
 
 function ProductsAPI() {
 
+  const [products, setProducts] = useState([])
   const [showModal, setShowModal] = useState('none')
   const [productData, setProductData] = useState({})
   const [searchProductData, setSearchProductData] = useState([])
@@ -18,6 +19,16 @@ function ProductsAPI() {
   const [showProducts, setShowProducts] = useState([])
   const [message, setMessage] = useState('')
   const timeOut = useRef()
+
+  //* Fetching Products Data from Database using API 
+  const getProducts = async () => {
+    const response = await API.get('/products')
+    setProducts(response.data.products);
+  };
+
+  useEffect(() => {
+    getProducts()
+  }, [])
 
   //* Displays a Modal when user click edit button or delete button 
   const showModals = (data, type, index) => {
@@ -87,7 +98,7 @@ function ProductsAPI() {
     setPages(pageTemporary)
   }
 
-  if (!searchProductData.length) {
+  if (products.length && !searchProductData.length) {
     setSearchProductData(products)
   }
 
@@ -119,7 +130,7 @@ function ProductsAPI() {
     setShowProducts(result)
   }
 
-  if (showProducts.length === 0) {
+  if (products.length && showProducts.length === 0) {
     const result = products.slice(0, 3)
     setShowProducts(result)
 
@@ -129,6 +140,7 @@ function ProductsAPI() {
       pageTemporary.push(i);
     }
 
+    setPageNow(1)
     setPages(pageTemporary)
 
     timeOut.current = setTimeout(() => {
@@ -224,7 +236,7 @@ function ProductsAPI() {
             </tr>
           </thead>
           <tbody>
-            {showProducts.map((item, index) => {
+            {showProducts?.map((item, index) => {
               return (
                 <tr className="bg-white border-b text-gray-800 border-slate-300 dark:text-gray-400 dark:bg-gray-800 dark:border-slate-500 hover:bg-amber-200 dark:hover:bg-amber-900 odd:bg-amber-100 dark:odd:bg-slate-900 group" key={index}>
                   <td className="text-center font-semibold">{(index + 1) + ((pageNow - 1) * dataPerPage)}</td>
@@ -259,7 +271,7 @@ function ProductsAPI() {
       </div>
 
       <nav className="flex justify-between items-center pt-4" aria-label="Table navigation">
-        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{(dataPerPage * pageNow) - dataPerPage + 1 === searchProductData.length ? '' : (dataPerPage * pageNow) - dataPerPage + 1 === dataPerPage * pageNow ? '' : (dataPerPage * pageNow) - dataPerPage + 1 + ' - '}{dataPerPage * pageNow > searchProductData.length ? searchProductData.length : dataPerPage * pageNow}</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProductData.length}</span></span>
+        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">Showing <span className="font-semibold text-gray-900 dark:text-white">{(dataPerPage * pageNow) - dataPerPage + 1 === searchProductData?.length ? '' : (dataPerPage * pageNow) - dataPerPage + 1 === dataPerPage * pageNow ? '' : (dataPerPage * pageNow) - dataPerPage + 1 + ' - '}{dataPerPage * pageNow > searchProductData?.length ? searchProductData?.length : dataPerPage * pageNow}</span> of <span className="font-semibold text-gray-900 dark:text-white">{searchProductData?.length}</span></span>
         <ul className="inline-flex items-center -space-x-px">
           <li>
             <button href="#" className="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white" onClick={onPrevious}>
