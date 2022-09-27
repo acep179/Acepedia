@@ -1,9 +1,8 @@
 import { useRef, useState } from 'react';
-import { BiAddToQueue } from 'react-icons/bi'
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { IoClose } from 'react-icons/io5';
 
-function AddProduct({ products, dataPerPage, setPages, setPageNow, setShowProducts, setResultMessage }) {
+function AddProduct({ products, close, dataPerPage, setPages, setPageNow, setShowProducts, setResultMessage }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -17,20 +16,6 @@ function AddProduct({ products, dataPerPage, setPages, setPageNow, setShowProduc
     sellingPrice: '',
     qty: ''
   })
-
-  const showModal = () => {
-    const modalBg = document.getElementById('modalBg')
-    const addProductModal = document.getElementById('addProductModal')
-    modalBg.style.display = 'block'
-    addProductModal.style.display = 'flex'
-  }
-
-  const close = () => {
-    const modalBg = document.getElementById('modalBg')
-    const addProductModal = document.getElementById('addProductModal')
-    modalBg.style.display = 'none'
-    addProductModal.style.display = 'none'
-  }
 
   const handleChange = (e) => {
 
@@ -190,12 +175,7 @@ function AddProduct({ products, dataPerPage, setPages, setPageNow, setShowProduc
 
   return (
     <>
-      <button className="flex items-center text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-400 font-medium rounded-lg text-sm px-2 py-1 text-center" type="button" onClick={showModal}>
-        <BiAddToQueue className='h-6 w-6 mr-2' />
-        <p className='text-lg'>Add Product</p>
-      </button>
-
-      <div id="addProductModal" tabIndex="-1" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 bottom-0 z-50 w-full md:inset-0 md:h-full justify-center items-center">
+      <div id="addProductModal" tabIndex="-1" className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 bottom-0 z-50 w-full md:inset-0 md:h-full justify-center items-center">
         <div id='modalBg' className="fixed z-40 top-0 bottom-0 right-0 left-0 bg-slate-500 bg-opacity-50" onClick={close}></div>
         <div className="relative p-4 w-full max-w-md h-full md:h-auto">
 

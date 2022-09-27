@@ -3,11 +3,13 @@ import { products } from "../fakeData/products"
 import { AiFillEdit, AiOutlineEdit } from 'react-icons/ai'
 import { IoTrashBin, IoTriangle } from 'react-icons/io5'
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
+import { BiAddToQueue } from 'react-icons/bi'
 import { AddProduct, DeleteProduct, EditProduct } from "../components"
 import { useRef, useState } from "react"
 
 function Products() {
 
+  const [showModal, setShowModal] = useState('none')
   const [productData, setProductData] = useState({})
   const [searchProductData, setSearchProductData] = useState([])
   const [pages, setPages] = useState([])
@@ -18,34 +20,25 @@ function Products() {
   const timeOut = useRef()
 
   //* Displays a Modal when user click edit button or delete button 
-  const showModal = (data, type, index) => {
+  const showModals = (data, type, index) => {
     setProductData({ index: (index + 1) + ((pageNow - 1) * dataPerPage), data })
-    const modalBg = document.getElementById('modalBg')
-    modalBg.style.display = 'block'
-
-    if (type === 'edit') {
-      const editProductModal = document.getElementById('editProductModal')
-      editProductModal.style.display = 'flex'
-      return
-    }
-
-    const deleteProductModal = document.getElementById('deleteProductModal')
-    deleteProductModal.style.display = 'flex'
+    setShowModal(type)
   }
 
   const closeModal = () => {
-    const modalBg = document.getElementById('modalBg')
-    const deleteProductModal = document.getElementById('deleteProductModal')
-    modalBg.style.display = 'none'
-    deleteProductModal.style.display = 'none'
+    setShowModal('none')
   }
 
-  //* Handle Delete 
-  const handleDelete = () => {
+  //* Handle Change Data : Delete or Edit
+  const handleChangeData = (type, form) => {
 
-    products.splice(productData.index - 1, 1)
+    if (type === 'edit') {
+      products.splice(productData.index - 1, 1, form)
+    } else if (type === 'delete') {
+      products.splice(productData.index - 1, 1)
+    }
 
-    let totalPage = Math.ceil(searchProductData.length / dataPerPage)
+    let totalPage = Math.ceil(products.length / dataPerPage)
     let pageTemporary = []
     for (let i = 0; i < totalPage; i++) {
       pageTemporary.push(i);
@@ -56,11 +49,11 @@ function Products() {
     setShowProducts(result)
 
     setMessage(
-      <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-red-100 rounded-lg dark:bg-red-200" role="alert">
-        <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+      <div className={`w-max flex items-center p-4 mb-4 mx-auto ${type === 'delete' ? 'bg-red-100 dark:bg-red-200' : 'bg-emerald-100 dark:bg-emerald-200'} rounded-lg`} role="alert">
+        <BsFillExclamationCircleFill className={`flex-shrink-0 w-5 h-5 ${type === 'delete' ? 'text-red-700 dark:text-red-800' : 'text-emerald-700 dark:text-emerald-800'}`} />
         <span className="sr-only">Info</span>
-        <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
-          {productData.data.name} has been removed
+        <div className={`ml-3 text-sm font-medium ${type === 'delete' ? 'text-red-700 dark:text-red-800' : 'text-emerald-700 dark:text-emerald-800'}`}>
+          {productData.data.name} has been {type === 'delete' ? 'removed' : 'edited'}
         </div>
       </div>
     )
@@ -189,9 +182,23 @@ function Products() {
             </div>
           </div>
         </div>
-        <AddProduct products={products} setResultMessage={setMessage} setPages={setPages} dataPerPage={dataPerPage} setPageNow={setPageNow} setShowProducts={setShowProducts} />
-        <EditProduct products={products} productData={productData} setResultMessage={setMessage} />
-        <DeleteProduct handleDelete={handleDelete} product={productData} products={products} close={closeModal} />
+        <button className="flex items-center text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-400 font-medium rounded-lg text-sm px-2 py-1 text-center" type="button" onClick={() => setShowModal('add')}>
+          <BiAddToQueue className='h-6 w-6 mr-2' />
+          <p className='text-lg'>Add Product</p>
+        </button>
+
+        {showModal === 'add' &&
+          <AddProduct setShowModal={setShowModal} products={products} setResultMessage={setMessage} setPages={setPages} dataPerPage={dataPerPage} setPageNow={setPageNow} setShowProducts={setShowProducts} close={closeModal} />
+        }
+
+        {showModal === 'edit' &&
+          <EditProduct products={products} handleEdit={handleChangeData} product={productData} dataPerPage={dataPerPage} setPages={setPages} pageNow={pageNow} setShowProducts={setShowProducts} setResultMessage={setMessage} close={closeModal} />
+        }
+
+        {showModal === 'delete' &&
+          <DeleteProduct handleDelete={handleChangeData} product={productData} products={products} close={closeModal} />
+        }
+
       </div>
 
       <form className='mb-5'>
@@ -229,14 +236,14 @@ function Products() {
                   <td className="py-4 px-6">{convertRupiah.convert(item.sellingPrice)}</td>
                   <td className="text-center">{item.qty}</td>
                   <td className="text-center">
-                    <button className='bg-red-500 hover:bg-red-600 ml-auto mr-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'delete', index)}>
+                    <button className='bg-red-500 hover:bg-red-600 ml-auto mr-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModals(item, 'delete', index)}>
                       <IoTrashBin className="w-5 h-5 peer" />
                       <div className='hidden peer-hover:block ml-2 absolute bg-red-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
                         <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-red-50" />
                         <p className='font-semibold text-red-700'>Remove Product</p>
                       </div>
                     </button>
-                    <button className='bg-emerald-500 hover:bg-emerald-600 mr-auto ml-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModal(item, 'edit', index)}>
+                    <button className='bg-emerald-500 hover:bg-emerald-600 mr-auto ml-1 px-2 py-1 text-white text-sm rounded-md relative' onClick={() => showModals(item, 'edit', index)}>
                       <AiFillEdit className="w-5 h-5 peer" />
                       <div className='hidden peer-hover:block ml-2 absolute bg-emerald-50 w-max text-slate-600 px-2 py-1 rounded-md -bottom-9 -right-3 z-10'>
                         <IoTriangle className="w-6 h-6 absolute -top-4 right-3 fill-emerald-50" />

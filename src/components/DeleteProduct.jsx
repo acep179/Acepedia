@@ -4,7 +4,7 @@ function DeleteProduct({ handleDelete, product, close }) {
 
   return (
     <>
-      <div id="deleteProductModal" tabIndex="-1" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 bottom-0 z-50 w-full md:inset-0 md:h-full justify-center items-center">
+      <div id="deleteProductModal" tabIndex="-1" className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 bottom-0 z-50 w-full md:inset-0 md:h-full justify-center items-center">
         <div id='modalBg' className="fixed z-40 top-0 bottom-0 right-0 left-0 bg-slate-500 bg-opacity-50" onClick={close}></div>
         <div className="relative p-4 w-full max-w-md h-full md:h-auto">
 
@@ -19,7 +19,7 @@ function DeleteProduct({ handleDelete, product, close }) {
                 <button className='bg-emerald-500 w-1/3 hover:bg-emerald-600 px-2 py-1 text-white text-sm rounded-md group relative' onClick={close}>
                   <p className='font-semibold text-center'>Cancel</p>
                 </button>
-                <button className='bg-red-500 w-1/3 hover:bg-red-600 px-2 py-1 text-white text-sm rounded-md group relative' onClick={handleDelete}>
+                <button className='bg-red-500 w-1/3 hover:bg-red-600 px-2 py-1 text-white text-sm rounded-md group relative' onClick={() => handleDelete('delete')}>
                   <p className='font-semibold text-center'>Delete Product</p>
                 </button>
               </div>

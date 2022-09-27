@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 
-function EditProduct({ products, productData, setResultMessage }) {
+function EditProduct({ products, handleEdit, product, close }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -14,20 +14,8 @@ function EditProduct({ products, productData, setResultMessage }) {
     image: '',
     purchasePrice: '',
     sellingPrice: '',
-    qty: ''
+    qty: '',
   })
-
-  useEffect(() => {
-    setPreview(productData.image)
-    setMessage('')
-  }, [productData])
-
-  const close = () => {
-    const modalBg = document.getElementById('modalBg')
-    const editProductModal = document.getElementById('editProductModal')
-    modalBg.style.display = 'none'
-    editProductModal.style.display = 'none'
-  }
 
   const handleChange = (e) => {
 
@@ -91,18 +79,19 @@ function EditProduct({ products, productData, setResultMessage }) {
 
     setMessage('')
 
+    //* Create Imange URL 
+    let url
+    if (e.target.type === 'file') {
+      url = URL.createObjectURL(e.target.files[0]);
+      setPreview(url);
+    }
+
     setForm({
       ...form,
       [e.target.name]:
-        e.target.type === 'file' ? e.target.files : e.target.value,
+        e.target.type === 'file' ? url : e.target.value,
     });
 
-    //* Create image url for preview
-    if (e.target.type === 'file') {
-      let url = URL.createObjectURL(e.target.files[0]);
-      //* URL digunakan untuk membuat URL dari gambar yang di-upload
-      setPreview(url);
-    }
   };
 
   const handleSubmit = (e) => {
@@ -113,16 +102,18 @@ function EditProduct({ products, productData, setResultMessage }) {
       return form.name === item.name
     })
     if (existingProductName.length) {
-      nameElement.current[0].className = "bg-red-50 border border-red-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-red-500 dark:placeholder-red-400"
-      return setMessage(
-        <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
-          <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
-          <span className="sr-only">Info</span>
-          <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
-            The product name already exist!
+      if (existingProductName !== product.data.name) {
+        nameElement.current[0].className = "bg-red-50 border border-red-300 text-red-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:border-red-500 dark:placeholder-red-400"
+        return setMessage(
+          <div id="alert-2" className="flex items-center p-4 mb-4 bg-red-100 rounded-lg dark:bg-red-200" role="alert">
+            <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-red-700 dark:text-red-800" />
+            <span className="sr-only">Info</span>
+            <div className="ml-3 text-sm font-medium text-red-700 dark:text-red-800 ">
+              The product name already exist!
+            </div>
           </div>
-        </div>
-      )
+        )
+      }
     }
 
     //* Displays an alert when choosing the wrong image (file size > 100KB or file type not jpg/png) 
@@ -138,24 +129,30 @@ function EditProduct({ products, productData, setResultMessage }) {
       )
     }
 
-    //* Displays an alert when successfully editing the product 
-    setResultMessage(
-      <div id='' className="w-max flex items-center p-4 mb-4 mx-auto bg-emerald-100 rounded-lg dark:bg-emerald-200" role="alert">
-        <BsFillExclamationCircleFill className="flex-shrink-0 w-5 h-5 text-emerald-700 dark:text-emerald-800" />
-        <span className="sr-only">Info</span>
-        <div className="ml-3 text-sm font-medium text-emerald-700 dark:text-emerald-800 ">
-          {productData.name} has been edited
-        </div>
-      </div>
-    )
+    if (!form.image) {
+      form.image = product.data.image
+    }
+    if (!form.name) {
+      form.name = product.data.name
+    }
+    if (!form.purchasePrice) {
+      form.purchasePrice = product.data.purchasePrice
+    }
+    if (!form.sellingPrice) {
+      form.sellingPrice = product.data.sellingPrice
+    }
+    if (!form.qty) {
+      form.qty = product.data.qty
+    }
+
+    handleEdit('edit', form)
 
     close()
-    setTimeout(() => setResultMessage(''), 5000)
   }
 
   return (
     <>
-      <div id="editProductModal" tabIndex="-1" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 bottom-0 z-50 w-full md:inset-0 md:h-full justify-center items-center">
+      <div id="editProductModal" tabIndex="-1" className="flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 bottom-0 z-50 w-full md:inset-0 md:h-full justify-center items-center">
         <div id='modalBg' className="fixed z-40 top-0 bottom-0 right-0 left-0 bg-slate-500 bg-opacity-50" onClick={close}></div>
         <div className="relative p-4 w-full max-w-md h-full md:h-auto">
 
@@ -191,13 +188,25 @@ function EditProduct({ products, productData, setResultMessage }) {
                   onChange={handleChange}
                 />
 
-                <input type="text" name="name" id="name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder={`Product's Name: ${productData.name}`} onChange={handleChange} />
+                <div>
+                  <label htmlFor="name">Name :</label>
+                  <input type="text" name="name" id="name" className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder={product?.data?.name} onChange={handleChange} />
+                </div>
 
-                <input type="number" name="purchasePrice" id="purchasePrice" placeholder={`Purchase Price: Rp ${productData.purchasePrice}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
+                <div>
+                  <label htmlFor="purchasePrice">Purchase Price :</label>
+                  <input type="number" name="purchasePrice" id="purchasePrice" placeholder={product?.data?.purchasePrice} className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
+                </div>
 
-                <input type="number" name="sellingPrice" id="sellingPrice" placeholder={`Selling Price: Rp ${productData.sellingPrice}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
+                <div>
+                  <label htmlFor="sellingPrice">Selling Price :</label>
+                  <input type="number" name="sellingPrice" id="sellingPrice" placeholder={product?.data?.sellingPrice} className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
+                </div>
 
-                <input type="number" name="qty" id="qty" placeholder={`Product's Stock: ${productData.qty}`} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
+                <div>
+                  <label htmlFor="qty">Quantity :</label>
+                  <input type="number" name="qty" id="qty" placeholder={product?.data?.qty} className="mt-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" onChange={handleChange} />
+                </div>
 
                 <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Save</button>
               </form>
