@@ -28,7 +28,7 @@ function ProductsAPI() {
 
   useEffect(() => {
     getProducts()
-  }, [])
+  })
 
   //* Displays a Modal when user click edit button or delete button 
   const showModals = (data, type, index) => {
@@ -200,7 +200,7 @@ function ProductsAPI() {
         </button>
 
         {showModal === 'add' &&
-          <AddProduct setShowModal={setShowModal} products={products} setResultMessage={setMessage} setPages={setPages} dataPerPage={dataPerPage} setPageNow={setPageNow} setShowProducts={setShowProducts} close={closeModal} />
+          <AddProduct isAPI={true} setShowModal={setShowModal} products={products} setResultMessage={setMessage} setPages={setPages} dataPerPage={dataPerPage} setPageNow={setPageNow} setShowProducts={setShowProducts} close={closeModal} />
         }
 
         {showModal === 'edit' &&

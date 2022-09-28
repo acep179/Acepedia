@@ -188,7 +188,7 @@ function Products() {
         </button>
 
         {showModal === 'add' &&
-          <AddProduct setShowModal={setShowModal} products={products} setResultMessage={setMessage} setPages={setPages} dataPerPage={dataPerPage} setPageNow={setPageNow} setShowProducts={setShowProducts} close={closeModal} />
+          <AddProduct isAPI={false} setShowModal={setShowModal} products={products} setResultMessage={setMessage} setPages={setPages} dataPerPage={dataPerPage} setPageNow={setPageNow} setShowProducts={setShowProducts} close={closeModal} />
         }
 
         {showModal === 'edit' &&

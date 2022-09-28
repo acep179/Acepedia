@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react';
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 import { IoClose } from 'react-icons/io5';
+import { API } from '../config/api';
 
-function AddProduct({ products, close, dataPerPage, setPages, setPageNow, setShowProducts, setResultMessage }) {
+function AddProduct({ products, isAPI, close, dataPerPage, setPages, setPageNow, setShowProducts, setResultMessage }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -88,15 +89,17 @@ function AddProduct({ products, close, dataPerPage, setPages, setPageNow, setSho
       setPreview(url);
     }
 
+    console.log(e.target.files)
+
     setForm({
       ...form,
       [e.target.name]:
-        e.target.type === 'file' ? url : e.target.value,
+        e.target.type === 'file' ? isAPI ? e.target.files : url : e.target.value,
     });
 
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     //* Handle product name must be unique 
@@ -142,8 +145,33 @@ function AddProduct({ products, close, dataPerPage, setPages, setPageNow, setSho
       }
     }
 
+
+
+
     //* Add form input to products data
-    products.push(form)
+
+    if (isAPI) {
+      const config = {
+        headers: {
+          'Content-type': 'multipart/form-data'
+        },
+      };
+
+      const formData = new FormData();
+      formData.set('image', form.image[0], form.image[0].name);
+      formData.set('name', form.name);
+      formData.set('purchasePrice', form.purchasePrice);
+      formData.set('sellingPrice', form.sellingPrice);
+      formData.set('qty', form.qty);
+
+      await API.post('/product', formData, config);
+
+      form.image = URL.createObjectURL(form.image[0])
+      products.push(form)
+    } else {
+      products.push(form)
+    }
+
 
     let totalPage = Math.ceil(products.length / dataPerPage)
 
