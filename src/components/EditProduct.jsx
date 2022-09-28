@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { BsFillExclamationCircleFill } from 'react-icons/bs'
 
-function EditProduct({ products, handleEdit, product, close }) {
+function EditProduct({ products, handleEdit, product, close, isAPI }) {
 
   const nameElement = useRef()
   nameElement.current = document.getElementsByName('name')
@@ -89,7 +89,7 @@ function EditProduct({ products, handleEdit, product, close }) {
     setForm({
       ...form,
       [e.target.name]:
-        e.target.type === 'file' ? url : e.target.value,
+        e.target.type === 'file' ? isAPI ? e.target.files : url : e.target.value,
     });
 
   };
@@ -129,9 +129,9 @@ function EditProduct({ products, handleEdit, product, close }) {
       )
     }
 
-    if (!form.image) {
-      form.image = product.data.image
-    }
+    // if (!form.image) {
+    //   form.image = product.data.image
+    // }
     if (!form.name) {
       form.name = product.data.name
     }

@@ -192,11 +192,11 @@ function Products() {
         }
 
         {showModal === 'edit' &&
-          <EditProduct products={products} handleEdit={handleChangeData} product={productData} dataPerPage={dataPerPage} setPages={setPages} pageNow={pageNow} setShowProducts={setShowProducts} setResultMessage={setMessage} close={closeModal} />
+          <EditProduct isAPI={false} products={products} handleEdit={handleChangeData} product={productData} dataPerPage={dataPerPage} setPages={setPages} pageNow={pageNow} setShowProducts={setShowProducts} setResultMessage={setMessage} close={closeModal} />
         }
 
         {showModal === 'delete' &&
-          <DeleteProduct handleDelete={handleChangeData} product={productData} products={products} close={closeModal} />
+          <DeleteProduct isAPI={false} handleDelete={handleChangeData} product={productData} products={products} close={closeModal} />
         }
 
       </div>

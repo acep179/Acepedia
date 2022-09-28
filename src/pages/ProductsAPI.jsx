@@ -28,7 +28,7 @@ function ProductsAPI() {
 
   useEffect(() => {
     getProducts()
-  })
+  }, [])
 
   //* Displays a Modal when user click edit button or delete button 
   const showModals = (data, type, index) => {
@@ -41,9 +41,29 @@ function ProductsAPI() {
   }
 
   //* Handle Change Data : Delete or Edit
-  const handleChangeData = (type, form) => {
+  const handleChangeData = async (type, form) => {
 
     if (type === 'edit') {
+
+      const config = {
+        headers: {
+          'Content-type': 'multipart/form-data'
+        },
+      };
+
+      console.log(form)
+
+      const formData = new FormData();
+      form.image && formData.set('image', form.image[0], form.image[0].name)
+      // : formData.set('image', null);
+      formData.set('name', form.name);
+      formData.set('purchasePrice', form.purchasePrice);
+      formData.set('sellingPrice', form.sellingPrice);
+      formData.set('qty', form.qty);
+
+      await API.patch(`/product/${productData.index}`, formData, config);
+
+      form.image = URL.createObjectURL(form.image[0])
       products.splice(productData.index - 1, 1, form)
     } else if (type === 'delete') {
       products.splice(productData.index - 1, 1)
@@ -204,11 +224,11 @@ function ProductsAPI() {
         }
 
         {showModal === 'edit' &&
-          <EditProduct products={products} handleEdit={handleChangeData} product={productData} dataPerPage={dataPerPage} setPages={setPages} pageNow={pageNow} setShowProducts={setShowProducts} setResultMessage={setMessage} close={closeModal} />
+          <EditProduct isAPI={true} products={products} handleEdit={handleChangeData} product={productData} dataPerPage={dataPerPage} setPages={setPages} pageNow={pageNow} setShowProducts={setShowProducts} setResultMessage={setMessage} close={closeModal} />
         }
 
         {showModal === 'delete' &&
-          <DeleteProduct handleDelete={handleChangeData} product={productData} products={products} close={closeModal} />
+          <DeleteProduct isAPI={true} handleDelete={handleChangeData} product={productData} products={products} close={closeModal} />
         }
 
       </div>
