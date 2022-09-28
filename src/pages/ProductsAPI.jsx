@@ -55,7 +55,6 @@ function ProductsAPI() {
 
       const formData = new FormData();
       form.image && formData.set('image', form.image[0], form.image[0].name)
-      // : formData.set('image', null);
       formData.set('name', form.name);
       formData.set('purchasePrice', form.purchasePrice);
       formData.set('sellingPrice', form.sellingPrice);
@@ -66,6 +65,8 @@ function ProductsAPI() {
       form.image = URL.createObjectURL(form.image[0])
       products.splice(productData.index - 1, 1, form)
     } else if (type === 'delete') {
+      await API.delete(`/product/${productData.index}`);
+
       products.splice(productData.index - 1, 1)
     }
 
@@ -228,7 +229,7 @@ function ProductsAPI() {
         }
 
         {showModal === 'delete' &&
-          <DeleteProduct isAPI={true} handleDelete={handleChangeData} product={productData} products={products} close={closeModal} />
+          <DeleteProduct handleDelete={handleChangeData} product={productData} products={products} close={closeModal} />
         }
 
       </div>

@@ -129,9 +129,9 @@ function EditProduct({ products, handleEdit, product, close, isAPI }) {
       )
     }
 
-    // if (!form.image) {
-    //   form.image = product.data.image
-    // }
+    if (!isAPI && !form.image) {
+      form.image = product.data.image
+    }
     if (!form.name) {
       form.name = product.data.name
     }
